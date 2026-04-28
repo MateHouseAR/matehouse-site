@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mate House — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --cream: #F5F0E8; --warm-white: #FAF7F2; --brown-dark: #2C1A0E;
+  --brown-mid: #6B3F1E; --brown-light: #A0622A; --gold: #C8902A;
+  --gold-light: #E8B84B; --text-body: #3D2B1A; --text-muted: #8A7060;
+  --border: rgba(100,60,20,0.15); --red: #C0392B; --green: #27AE60;
+}
+body { font-family: 'Jost', sans-serif; background: #F0EBE3; color: var(--text-body); min-height: 100vh; }
+
+/* LOGIN */
+#login-screen {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  background: var(--brown-dark);
+}
+.login-box {
+  background: var(--warm-white); border-radius: 6px; padding: 3rem 2.5rem;
+  width: 100%; max-width: 380px; text-align: center;
+}
+.login-logo {
+  font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--brown-dark);
+  margin-bottom: 0.4rem;
+}
+.login-logo span { color: var(--gold); font-style: italic; }
+.login-sub { font-size: 0.78rem; color: var(--text-muted); letter-spacing: 0.08em; margin-bottom: 2rem; }
+.login-box label { display: block; text-align: left; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem; font-weight: 500; }
+.login-box input[type=password] {
+  width: 100%; padding: 0.75rem 1rem; border: 0.5px solid var(--border);
+  border-radius: 3px; font-family: 'Jost', sans-serif; font-size: 0.95rem;
+  background: var(--cream); color: var(--text-body); margin-bottom: 1.2rem;
+  outline: none; transition: border-color 0.2s;
+}
+.login-box input[type=password]:focus { border-color: var(--gold); }
+.btn-login {
+  width: 100%; padding: 0.85rem; background: var(--brown-dark); color: var(--cream);
+  border: none; border-radius: 3px; font-family: 'Jost', sans-serif;
+  font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500;
+  cursor: pointer; transition: background 0.2s;
+}
+.btn-login:hover { background: var(--brown-mid); }
+.login-error { font-size: 0.78rem; color: var(--red); margin-top: 0.8rem; display: none; }
+
+/* ADMIN LAYOUT */
+#admin-screen { display: none; min-height: 100vh; }
+.admin-header {
+  background: var(--brown-dark); padding: 1rem 2rem;
+  display: flex; justify-content: space-between; align-items: center;
+  position: sticky; top: 0; z-index: 100;
+}
+.admin-logo { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--cream); }
+.admin-logo span { color: var(--gold); font-style: italic; }
+.admin-logo-sub { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(245,240,232,0.4); margin-left: 0.8rem; }
+.btn-logout {
+  font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500;
+  background: transparent; color: rgba(245,240,232,0.5); border: 0.5px solid rgba(245,240,232,0.2);
+  padding: 0.4rem 1rem; border-radius: 2px; cursor: pointer; font-family: 'Jost', sans-serif;
+  transition: all 0.2s;
+}
+.btn-logout:hover { color: var(--cream); border-color: rgba(245,240,232,0.5); }
+.btn-view-site {
+  font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500;
+  background: var(--gold); color: var(--brown-dark); border: none;
+  padding: 0.4rem 1rem; border-radius: 2px; cursor: pointer; font-family: 'Jost', sans-serif;
+  text-decoration: none; margin-right: 0.5rem; transition: background 0.2s;
+}
+.btn-view-site:hover { background: var(--gold-light); }
+
+.admin-body { display: grid; grid-template-columns: 220px 1fr; min-height: calc(100vh - 58px); }
+
+/* SIDEBAR */
+.admin-sidebar {
+  background: var(--warm-white); border-right: 0.5px solid var(--border);
+  padding: 1.5rem 0;
+}
+.sidebar-section { margin-bottom: 0.5rem; }
+.sidebar-label {
+  font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--text-muted); padding: 0.4rem 1.5rem; font-weight: 500;
+}
+.sidebar-item {
+  display: flex; align-items: center; gap: 0.7rem;
+  padding: 0.65rem 1.5rem; cursor: pointer; font-size: 0.85rem;
+  color: var(--text-muted); transition: all 0.15s; border: none;
+  background: none; width: 100%; text-align: left; font-family: 'Jost', sans-serif;
+}
+.sidebar-item:hover { color: var(--brown-dark); background: var(--cream); }
+.sidebar-item.active { color: var(--brown-dark); background: var(--cream); font-weight: 500; border-left: 2px solid var(--gold); }
+.sidebar-count {
+  margin-left: auto; font-size: 0.68rem; background: var(--cream);
+  color: var(--text-muted); padding: 0.1rem 0.5rem; border-radius: 10px;
+}
+.sidebar-item.active .sidebar-count { background: rgba(200,144,42,0.15); color: var(--gold); }
+
+/* MAIN CONTENT */
+.admin-main { padding: 2rem; overflow-y: auto; }
+.admin-panel { display: none; }
+.admin-panel.active { display: block; }
+
+.panel-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 1.5rem;
+}
+.panel-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--brown-dark); }
+.btn-add {
+  display: flex; align-items: center; gap: 0.4rem;
+  font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500;
+  background: var(--brown-dark); color: var(--cream); border: none;
+  padding: 0.6rem 1.2rem; border-radius: 3px; cursor: pointer; font-family: 'Jost', sans-serif;
+  transition: background 0.2s;
+}
+.btn-add:hover { background: var(--brown-mid); }
+
+/* PRODUCT TABLE */
+.product-table { width: 100%; border-collapse: collapse; }
+.product-table th {
+  text-align: left; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--text-muted); padding: 0.6rem 1rem; font-weight: 500;
+  border-bottom: 0.5px solid var(--border); background: var(--warm-white);
+}
+.product-table td {
+  padding: 0.8rem 1rem; border-bottom: 0.5px solid var(--border);
+  background: white; vertical-align: middle; font-size: 0.88rem;
+}
+.product-table tr:last-child td { border-bottom: none; }
+.product-table tr:hover td { background: var(--cream); }
+.product-thumb {
+  width: 48px; height: 48px; border-radius: 3px; object-fit: cover;
+  background: var(--cream); display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; border: 0.5px solid var(--border); cursor: pointer;
+  position: relative; overflow: hidden;
+}
+.product-thumb:hover::after {
+  content: '📷'; position: absolute; inset: 0; background: rgba(44,26,14,0.6);
+  display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+}
+.prod-name { font-weight: 500; color: var(--brown-dark); }
+.prod-detail { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem; }
+.price-input {
+  width: 120px; padding: 0.4rem 0.6rem; border: 0.5px solid var(--border);
+  border-radius: 3px; font-family: 'Jost', sans-serif; font-size: 0.88rem;
+  color: var(--text-body); background: var(--warm-white); outline: none;
+  transition: border-color 0.2s;
+}
+.price-input:focus { border-color: var(--gold); }
+.price-prefix { font-size: 0.78rem; color: var(--text-muted); margin-right: 0.3rem; }
+.badge {
+  font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500;
+  padding: 0.2rem 0.6rem; border-radius: 10px;
+}
+.badge-active { background: rgba(39,174,96,0.12); color: var(--green); }
+.badge-inactive { background: rgba(192,57,43,0.1); color: var(--red); }
+.btn-icon {
+  background: none; border: none; cursor: pointer; padding: 0.3rem;
+  color: var(--text-muted); font-size: 1rem; transition: color 0.15s; border-radius: 2px;
+}
+.btn-icon:hover { color: var(--brown-dark); background: var(--cream); }
+.btn-save-row {
+  font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500;
+  background: rgba(39,174,96,0.1); color: var(--green); border: 0.5px solid rgba(39,174,96,0.3);
+  padding: 0.3rem 0.7rem; border-radius: 2px; cursor: pointer; font-family: 'Jost', sans-serif;
+  transition: all 0.15s;
+}
+.btn-save-row:hover { background: rgba(39,174,96,0.2); }
+
+/* TOAST */
+.toast {
+  position: fixed; bottom: 2rem; right: 2rem; z-index: 999;
+  background: var(--brown-dark); color: var(--cream); padding: 0.8rem 1.4rem;
+  border-radius: 4px; font-size: 0.82rem; font-family: 'Jost', sans-serif;
+  opacity: 0; transform: translateY(10px); transition: all 0.3s; pointer-events: none;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+
+/* MODAL */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(44,26,14,0.5);
+  z-index: 200; align-items: center; justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--warm-white); border-radius: 6px; padding: 2rem;
+  width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto;
+}
+.modal-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--brown-dark); margin-bottom: 1.5rem; }
+.form-group { margin-bottom: 1.1rem; }
+.form-label { display: block; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem; font-weight: 500; }
+.form-input, .form-select, .form-textarea {
+  width: 100%; padding: 0.7rem 0.9rem; border: 0.5px solid var(--border);
+  border-radius: 3px; font-family: 'Jost', sans-serif; font-size: 0.9rem;
+  color: var(--text-body); background: var(--cream); outline: none; transition: border-color 0.2s;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--gold); }
+.form-textarea { resize: vertical; min-height: 80px; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 0.8rem; margin-top: 1.5rem; }
+.btn-cancel {
+  font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500;
+  background: transparent; color: var(--text-muted); border: 0.5px solid var(--border);
+  padding: 0.6rem 1.2rem; border-radius: 3px; cursor: pointer; font-family: 'Jost', sans-serif;
+  transition: all 0.2s;
+}
+.btn-cancel:hover { color: var(--text-body); }
+.btn-confirm {
+  font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500;
+  background: var(--brown-dark); color: var(--cream); border: none;
+  padding: 0.6rem 1.4rem; border-radius: 3px; cursor: pointer; font-family: 'Jost', sans-serif;
+  transition: background 0.2s;
+}
+.btn-confirm:hover { background: var(--brown-mid); }
+
+/* UPLOAD AREA */
+.upload-area {
+  border: 1.5px dashed var(--border); border-radius: 4px; padding: 2rem;
+  text-align: center; cursor: pointer; transition: all 0.2s; background: var(--cream);
+}
+.upload-area:hover { border-color: var(--gold); background: rgba(200,144,42,0.05); }
+.upload-icon { font-size: 2rem; margin-bottom: 0.5rem; opacity: 0.4; }
+.upload-text { font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; }
+.upload-text strong { color: var(--brown-dark); }
+
+/* STATS */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+.stat-card {
+  background: white; border-radius: 4px; padding: 1.2rem 1.5rem;
+  border: 0.5px solid var(--border);
+}
+.stat-card-label { font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem; }
+.stat-card-value { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--brown-dark); }
+.stat-card-sub { font-size: 0.72rem; color: var(--text-muted); margin-top: 0.2rem; }
+
+/* SETTINGS */
+.settings-section { background: white; border-radius: 4px; border: 0.5px solid var(--border); padding: 1.5rem; margin-bottom: 1.2rem; }
+.settings-section h4 { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--brown-dark); margin-bottom: 1.2rem; padding-bottom: 0.7rem; border-bottom: 0.5px solid var(--border); }
+.settings-row { display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 0; border-bottom: 0.5px solid var(--border); }
+.settings-row:last-child { border-bottom: none; padding-bottom: 0; }
+.settings-row-label { font-size: 0.85rem; color: var(--text-body); }
+.settings-row-sub { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem; }
+.btn-settings-action {
+  font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500;
+  background: var(--cream); color: var(--brown-mid); border: 0.5px solid var(--border);
+  padding: 0.4rem 0.9rem; border-radius: 2px; cursor: pointer; font-family: 'Jost', sans-serif;
+  transition: all 0.15s;
+}
+.btn-settings-action:hover { background: var(--brown-dark); color: var(--cream); border-color: var(--brown-dark); }
+
+/* FILE INPUT HIDDEN */
+input[type=file] { display: none; }
+
+@media (max-width: 768px) {
+  .admin-body { grid-template-columns: 1fr; }
+  .admin-sidebar { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">Mate <span>House</span></div>
+    <p class="login-sub">Panel de administración</p>
+    <label for="pwd">Contraseña</label>
+    <input type="password" id="pwd" placeholder="••••••••" onkeydown="if(event.key==='Enter') doLogin()">
+    <button class="btn-login" onclick="doLogin()">Ingresar</button>
+    <p class="login-error" id="login-error">Contraseña incorrecta</p>
+    <p style="font-size:0.7rem;color:var(--text-muted);margin-top:1.5rem">Contraseña demo: <strong>matehouse2026</strong></p>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="admin-screen">
+  <div class="admin-header">
+    <div style="display:flex;align-items:center">
+      <div class="admin-logo">Mate <span>House</span></div>
+      <span class="admin-logo-sub">Admin</span>
+    </div>
+    <div style="display:flex;gap:0.5rem;align-items:center">
+      <a href="matehouse.html" target="_blank" class="btn-view-site">Ver sitio →</a>
+      <button class="btn-logout" onclick="doLogout()">Salir</button>
+    </div>
+  </div>
+
+  <div class="admin-body">
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">Resumen</div>
+        <button class="sidebar-item active" onclick="showPanel('dashboard',this)">📊 Dashboard</button>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Catálogo</div>
+        <button class="sidebar-item" onclick="showPanel('imperiales',this)">🧉 Imperiales <span class="sidebar-count">8</span></button>
+        <button class="sidebar-item" onclick="showPanel('torpedos',this)">🧉 Torpedos <span class="sidebar-count">6</span></button>
+        <button class="sidebar-item" onclick="showPanel('camioneros',this)">🧉 Camioneros <span class="sidebar-count">5</span></button>
+        <button class="sidebar-item" onclick="showPanel('otros',this)">🧉 Otros mates <span class="sidebar-count">2</span></button>
+        <button class="sidebar-item" onclick="showPanel('termos',this)">♨️ Termos <span class="sidebar-count">4</span></button>
+        <button class="sidebar-item" onclick="showPanel('materas',this)">👜 Materas <span class="sidebar-count">5</span></button>
+        <button class="sidebar-item" onclick="showPanel('bombillas',this)">🪈 Bombillas <span class="sidebar-count">7</span></button>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Configuración</div>
+        <button class="sidebar-item" onclick="showPanel('settings',this)">⚙️ Ajustes</button>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="admin-main">
+
+      <!-- DASHBOARD -->
+      <div class="admin-panel active" id="panel-dashboard">
+        <div class="panel-header">
+          <h2 class="panel-title">Dashboard</h2>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-card-label">Total productos</div><div class="stat-card-value">37</div><div class="stat-card-sub">en 7 categorías</div></div>
+          <div class="stat-card"><div class="stat-card-label">Sin foto</div><div class="stat-card-value" style="color:var(--gold)">37</div><div class="stat-card-sub">pendientes de imagen</div></div>
+          <div class="stat-card"><div class="stat-card-label">Precio más alto</div><div class="stat-card-value">$60k</div><div class="stat-card-sub">Imperial Premium Cuero Crudo</div></div>
+          <div class="stat-card"><div class="stat-card-label">Precio más bajo</div><div class="stat-card-value">$4k</div><div class="stat-card-sub">Bombilla chata acero</div></div>
+        </div>
+        <div style="background:white;border-radius:4px;border:0.5px solid var(--border);padding:1.5rem;">
+          <h4 style="font-family:'Playfair Display',serif;font-size:1rem;color:var(--brown-dark);margin-bottom:1rem;">Próximos pasos</h4>
+          <div style="display:flex;flex-direction:column;gap:0.8rem;">
+            <div style="display:flex;align-items:center;gap:0.8rem;font-size:0.85rem;color:var(--text-body)"><span style="color:var(--gold);font-size:1rem">○</span> Subir fotos a todos los productos</div>
+            <div style="display:flex;align-items:center;gap:0.8rem;font-size:0.85rem;color:var(--text-body)"><span style="color:var(--gold);font-size:1rem">○</span> Registrar dominio en NIC.ar</div>
+            <div style="display:flex;align-items:center;gap:0.8rem;font-size:0.85rem;color:var(--text-body)"><span style="color:var(--gold);font-size:1rem">○</span> Subir a Vercel</div>
+            <div style="display:flex;align-items:center;gap:0.8rem;font-size:0.85rem;color:var(--text-muted)"><span style="color:var(--border);font-size:1rem">○</span> Conectar con marketplace (Etapa 2)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- IMPERIALES -->
+      <div class="admin-panel" id="panel-imperiales">
+        <div class="panel-header">
+          <h2 class="panel-title">Imperiales</h2>
+          <button class="btn-add" onclick="openAddModal('Imperiales')">+ Agregar producto</button>
+        </div>
+        <div style="overflow-x:auto;border-radius:4px;border:0.5px solid var(--border);">
+          <table class="product-table" id="table-imperiales"></table>
+        </div>
+      </div>
+
+      <!-- TORPEDOS -->
+      <div class="admin-panel" id="panel-torpedos">
+        <div class="panel-header">
+          <h2 class="panel-title">Torpedos</h2>
+          <button class="btn-add" onclick="openAddModal('Torpedos')">+ Agregar producto</button>
+        </div>
+        <div style="overflow-x:auto;border-radius:4px;border:0.5px solid var(--border);">
+          <table class="product-table" id="table-torpedos"></table>
+        </div>
+      </div>
+
+      <!-- CAMIONEROS -->
+      <div class="admin-panel" id="panel-camioneros">
+        <div class="panel-header">
+          <h2 class="panel-title">Camioneros</h2>
+          <button class="btn-add" onclick="openAddModal('Camioneros')">+ Agregar producto</button>
+        </div>
+        <div style="overflow-x:auto;border-radius:4px;border:0.5px solid var(--border);">
+          <table class="product-table" id="table-camioneros"></table>
+        </div>
+      </div>
+
+      <!-- OTROS -->
+      <div class="admin-panel" id="panel-otros">
+        <div class="panel-header">
+          <h2 class="panel-title">Otros mates</h2>
+          <button class="btn-add" onclick="openAddModal('Otros')">+ Agregar producto</button>
+        </div>
+        <div style="overflow-x:auto;border-radius:4px;border:0.5px solid var(--border);">
+          <table class="product-table" id="table-otros"></table>
+        </div>
+      </div>
+
+      <!-- TERMOS -->
+      <div class="admin-panel" id="panel-termos">
+        <div class="panel-header">
+          <h2 class="panel-title">Termos</h2>
+          <button class="btn-add" onclick="openAddModal('Termos')">+ Agregar producto</button>
+        </div>
+        <div style="overflow-x:auto;border-radius:4px;border:0.5px solid var(--border);">
+          <table class="product-table" id="table-termos"></table>
+        </div>
+      </div>
+
+      <!-- MATERAS -->
+      <div class="admin-panel" id="panel-materas">
+        <div class="panel-header">
+          <h2 class="panel-title">Materas</h2>
+          <button class="btn-add" onclick="openAddModal('Materas')">+ Agregar producto</button>
+        </div>
+        <div style="overflow-x:auto;border-radius:4px;border:0.5px solid var(--border);">
+          <table class="product-table" id="table-materas"></table>
+        </div>
+      </div>
+
+      <!-- BOMBILLAS -->
+      <div class="admin-panel" id="panel-bombillas">
+        <div class="panel-header">
+          <h2 class="panel-title">Bombillas</h2>
+          <button class="btn-add" onclick="openAddModal('Bombillas')">+ Agregar producto</button>
+        </div>
+        <div style="overflow-x:auto;border-radius:4px;border:0.5px solid var(--border);">
+          <table class="product-table" id="table-bombillas"></table>
+        </div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div class="admin-panel" id="panel-settings">
+        <div class="panel-header"><h2 class="panel-title">Ajustes</h2></div>
+        <div class="settings-section">
+          <h4>Acceso al panel</h4>
+          <div class="settings-row">
+            <div><div class="settings-row-label">Contraseña de admin</div><div class="settings-row-sub">Cambiá tu contraseña de acceso</div></div>
+            <button class="btn-settings-action" onclick="showToast('Función disponible con backend conectado')">Cambiar</button>
+          </div>
+        </div>
+        <div class="settings-section">
+          <h4>Sitio web</h4>
+          <div class="settings-row">
+            <div><div class="settings-row-label">Nombre del negocio</div><div class="settings-row-sub">Mate House</div></div>
+            <button class="btn-settings-action" onclick="showToast('Función disponible con backend conectado')">Editar</button>
+          </div>
+          <div class="settings-row">
+            <div><div class="settings-row-label">Instagram</div><div class="settings-row-sub">@_matehouse_</div></div>
+            <button class="btn-settings-action" onclick="showToast('Función disponible con backend conectado')">Editar</button>
+          </div>
+          <div class="settings-row">
+            <div><div class="settings-row-label">WhatsApp de contacto</div><div class="settings-row-sub">No configurado</div></div>
+            <button class="btn-settings-action" onclick="showToast('Función disponible con backend conectado')">Agregar</button>
+          </div>
+        </div>
+        <div class="settings-section">
+          <h4>Datos del catálogo</h4>
+          <div class="settings-row">
+            <div><div class="settings-row-label">Exportar catálogo</div><div class="settings-row-sub">Descargar todos los productos como JSON</div></div>
+            <button class="btn-settings-action" onclick="exportCatalog()">Exportar</button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- MODAL AGREGAR -->
+<div class="modal-overlay" id="modal-add">
+  <div class="modal">
+    <h3 class="modal-title">Agregar producto</h3>
+    <div class="form-group">
+      <label class="form-label">Categoría</label>
+      <select class="form-select" id="modal-cat">
+        <option>Imperiales</option><option>Torpedos</option><option>Camioneros</option>
+        <option>Otros</option><option>Termos</option><option>Materas</option><option>Bombillas</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Nombre</label>
+      <input type="text" class="form-input" id="modal-name" placeholder="Ej: Imperial Premium Cuero">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Descripción / materiales</label>
+      <textarea class="form-textarea" id="modal-desc" placeholder="Ej: Fleje de alpaca · Virola de acero"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Precio ($)</label>
+      <input type="number" class="form-input" id="modal-price" placeholder="50000">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Foto del producto</label>
+      <div class="upload-area" onclick="document.getElementById('modal-file').click()">
+        <div class="upload-icon">📷</div>
+        <div class="upload-text"><strong>Hacé clic para subir una foto</strong><br>JPG, PNG hasta 5 MB</div>
+      </div>
+      <input type="file" id="modal-file" accept="image/*">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="btn-confirm" onclick="saveNewProduct()">Guardar producto</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<input type="file" id="img-file-input" accept="image/*">
+
+<script>
+const PASS = 'matehouse2026';
+
+// ── DATA ──
+const catalog = {
+  imperiales: [
+    {name:'Imperial Colores', detail:'Suela / Blanco / Rosa · Interior acero', price:35000, active:true, img:''},
+    {name:'Imperial Deluxe', detail:'Fleje de Alpaca · Virola de Acero', price:30000, active:true, img:''},
+    {name:'Imperial Clásico', detail:'Fleje de Bronce · Virola de Acero', price:30000, active:true, img:''},
+    {name:'Imperial Bronce', detail:'Base de Alpaca · Bolitas de Bronce', price:35000, active:true, img:''},
+    {name:'Imperial Premium', detail:'Base de Alpaca', price:50000, active:true, img:''},
+    {name:'Imperial Cuero Crudo', detail:'Calabaza brasilera · Fleje y virola de Alpaca', price:50000, active:true, img:''},
+    {name:'Imperial Animal Print', detail:'Base de Alpaca y Bolitas', price:50000, active:true, img:''},
+    {name:'Imperial Premium Cuero Crudo', detail:'Cuero crudo · Calabaza brasilera', price:60000, active:true, img:''},
+  ],
+  torpedos: [
+    {name:'Torpedo Clásico', detail:'Virola de Acero', price:30000, active:true, img:''},
+    {name:'Torpedo Cincelado', detail:'Virola de Alpaca cincelada', price:38000, active:true, img:''},
+    {name:'Torpedo Premium', detail:'Fleje y virola de Alpaca', price:50000, active:true, img:''},
+    {name:'Torpedo Algarrobo', detail:'Cuero vacuno · Base alpaca · Bolitas de bronce', price:50000, active:true, img:''},
+    {name:'Torpedo Cuero Crudo', detail:'Virola cincelada de alpaca', price:50000, active:true, img:''},
+    {name:'Torpedo Premium Cuero Crudo', detail:'Cuero repujado · Calabaza brasilera', price:60000, active:true, img:''},
+  ],
+  camioneros: [
+    {name:'Camionero Clásico', detail:'Virola de Alpaca · Fleje de Acero', price:15000, active:true, img:''},
+    {name:'Camionero Imperial', detail:'Virola de Acero', price:30000, active:true, img:''},
+    {name:'Camionero Ranchero', detail:'Virola de Acero', price:35000, active:true, img:''},
+    {name:'Camionero Cuero Crudo', detail:'Virola de Acero', price:25000, active:true, img:''},
+    {name:'Camionero Repujado', detail:'Virola de Aluminio', price:23000, active:true, img:''},
+  ],
+  otros: [
+    {name:'Mate Imperial Pampa PVC Térmico', detail:'Negro · Marrón · Blanco · Verde · Rosa', price:15000, active:true, img:''},
+    {name:'Acero Simil Stanley', detail:'', price:15000, active:true, img:''},
+  ],
+  termos: [
+    {name:'Termo Media Manija Negro', detail:'', price:30000, active:true, img:''},
+    {name:'Termo Media Manija', detail:'', price:30000, active:true, img:''},
+    {name:'Termo Simil Stanley', detail:'', price:40000, active:true, img:''},
+    {name:'Termo Mate System', detail:'', price:50000, active:true, img:''},
+  ],
+  materas: [
+    {name:'Matera Eco Cuero', detail:'', price:12500, active:true, img:''},
+    {name:'Matera 100% Cuero', detail:'', price:20000, active:true, img:''},
+    {name:'Porta Mate Eco Cuero', detail:'', price:7500, active:true, img:''},
+    {name:'Porta Mate 100% Cuero', detail:'', price:45000, active:true, img:''},
+    {name:'Matera Eco Cuero Grande', detail:'', price:16500, active:true, img:''},
+  ],
+  bombillas: [
+    {name:'Chata acero', detail:'', price:4000, active:true, img:''},
+    {name:'Pico loro', detail:'', price:7500, active:true, img:''},
+    {name:'Pico loro alpaca', detail:'', price:12000, active:true, img:''},
+    {name:'Bombillón premium', detail:'', price:25000, active:true, img:''},
+    {name:'Premium pico recto', detail:'', price:30000, active:true, img:''},
+    {name:'Alpaca pico recto', detail:'', price:25000, active:true, img:''},
+    {name:'Alpaca recto labrado pico bronce', detail:'', price:25000, active:true, img:''},
+  ]
+};
+
+let pendingImgRow = null;
+
+// ── AUTH ──
+function doLogin() {
+  const v = document.getElementById('pwd').value;
+  if (v === PASS) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('admin-screen').style.display = 'block';
+    renderAllTables();
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+  }
+}
+function doLogout() {
+  document.getElementById('admin-screen').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('pwd').value = '';
+}
+
+// ── PANELS ──
+function showPanel(id, btn) {
+  document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── TABLES ──
+function renderAllTables() {
+  Object.keys(catalog).forEach(cat => renderTable(cat));
+}
+
+function renderTable(cat) {
+  const table = document.getElementById('table-' + cat);
+  if (!table) return;
+  table.innerHTML = `
+    <thead><tr>
+      <th style="width:60px">Foto</th>
+      <th>Producto</th>
+      <th style="width:160px">Precio</th>
+      <th style="width:90px">Estado</th>
+      <th style="width:100px">Acciones</th>
+    </tr></thead>
+    <tbody>
+      ${catalog[cat].map((p,i) => `
+        <tr>
+          <td>
+            <div class="product-thumb" onclick="triggerImgUpload('${cat}',${i})" title="Cambiar foto">
+              ${p.img ? `<img src="${p.img}" style="width:100%;height:100%;object-fit:cover;border-radius:3px">` : '🧉'}
+            </div>
+          </td>
+          <td>
+            <div class="prod-name">${p.name}</div>
+            ${p.detail ? `<div class="prod-detail">${p.detail}</div>` : ''}
+          </td>
+          <td>
+            <span class="price-prefix">$</span>
+            <input class="price-input" type="number" value="${p.price}" id="price-${cat}-${i}"
+              onchange="updatePrice('${cat}',${i},this.value)">
+          </td>
+          <td>
+            <span class="badge ${p.active ? 'badge-active' : 'badge-inactive'}" 
+              style="cursor:pointer" onclick="toggleActive('${cat}',${i})">
+              ${p.active ? 'Activo' : 'Oculto'}
+            </span>
+          </td>
+          <td style="display:flex;gap:0.3rem;align-items:center">
+            <button class="btn-save-row" onclick="saveRow('${cat}',${i})">Guardar</button>
+            <button class="btn-icon" onclick="deleteRow('${cat}',${i})" title="Eliminar">🗑</button>
+          </td>
+        </tr>
+      `).join('')}
+    </tbody>`;
+}
+
+function updatePrice(cat, i, val) {
+  catalog[cat][i].price = parseInt(val) || 0;
+}
+
+function saveRow(cat, i) {
+  const newPrice = document.getElementById(`price-${cat}-${i}`).value;
+  catalog[cat][i].price = parseInt(newPrice) || catalog[cat][i].price;
+  showToast('✓ Precio actualizado correctamente');
+}
+
+function toggleActive(cat, i) {
+  catalog[cat][i].active = !catalog[cat][i].active;
+  renderTable(cat);
+  showToast(catalog[cat][i].active ? '✓ Producto activado' : 'Producto ocultado');
+}
+
+function deleteRow(cat, i) {
+  if (!confirm(`¿Eliminar "${catalog[cat][i].name}"?`)) return;
+  catalog[cat].splice(i, 1);
+  renderTable(cat);
+  showToast('Producto eliminado');
+}
+
+// ── IMAGE UPLOAD ──
+function triggerImgUpload(cat, i) {
+  pendingImgRow = {cat, i};
+  document.getElementById('img-file-input').click();
+}
+document.getElementById('img-file-input').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (!file || !pendingImgRow) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    catalog[pendingImgRow.cat][pendingImgRow.i].img = ev.target.result;
+    renderTable(pendingImgRow.cat);
+    showToast('✓ Foto subida correctamente');
+    pendingImgRow = null;
+  };
+  reader.readAsDataURL(file);
+  this.value = '';
+});
+
+// ── MODAL ──
+function openAddModal(cat) {
+  document.getElementById('modal-cat').value = cat;
+  document.getElementById('modal-name').value = '';
+  document.getElementById('modal-desc').value = '';
+  document.getElementById('modal-price').value = '';
+  document.getElementById('modal-add').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('modal-add').classList.remove('open');
+}
+function saveNewProduct() {
+  const cat = document.getElementById('modal-cat').value.toLowerCase();
+  const name = document.getElementById('modal-name').value.trim();
+  const price = parseInt(document.getElementById('modal-price').value) || 0;
+  const detail = document.getElementById('modal-desc').value.trim();
+  if (!name) { showToast('⚠ Ingresá un nombre'); return; }
+  if (!catalog[cat]) { showToast('⚠ Categoría no válida'); return; }
+  catalog[cat].push({name, detail, price, active:true, img:''});
+  renderTable(cat);
+  closeModal();
+  showToast('✓ Producto agregado');
+}
+document.getElementById('modal-add').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ── EXPORT ──
+function exportCatalog() {
+  const blob = new Blob([JSON.stringify(catalog, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'matehouse-catalogo.json';
+  a.click();
+  showToast('✓ Catálogo exportado');
+}
+
+// ── TOAST ──
+let toastTimeout;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => t.classList.remove('show'), 2800);
+}
+</script>
+</body>
+</html>

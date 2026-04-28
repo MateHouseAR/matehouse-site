@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mate House — Mates & Accesorios</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #F5F0E8;
+    --warm-white: #FAF7F2;
+    --brown-dark: #2C1A0E;
+    --brown-mid: #6B3F1E;
+    --brown-light: #A0622A;
+    --gold: #C8902A;
+    --gold-light: #E8B84B;
+    --text-body: #3D2B1A;
+    --text-muted: #8A7060;
+    --border: rgba(100, 60, 20, 0.15);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--warm-white);
+    color: var(--text-body);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.2rem 3rem;
+    background: rgba(250, 247, 242, 0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 0.5px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--brown-dark);
+    letter-spacing: 0.03em;
+  }
+  .nav-logo span { color: var(--gold); font-style: italic; }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-muted); text-decoration: none; font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--brown-dark); }
+  .nav-ig {
+    display: flex; align-items: center; gap: 0.5rem;
+    font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--brown-mid); text-decoration: none; font-weight: 500;
+    border: 0.5px solid var(--brown-mid); padding: 0.45rem 1rem;
+    border-radius: 2px; transition: all 0.2s;
+  }
+  .nav-ig:hover { background: var(--brown-dark); color: var(--cream); border-color: var(--brown-dark); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid; grid-template-columns: 1fr 1fr;
+    padding-top: 80px;
+  }
+  .hero-left {
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 4rem 3rem 4rem 4rem;
+    background: var(--warm-white);
+  }
+  .hero-eyebrow {
+    font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); font-weight: 500; margin-bottom: 1.5rem;
+  }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 4vw, 4.2rem);
+    line-height: 1.1;
+    color: var(--brown-dark);
+    margin-bottom: 1.5rem;
+  }
+  .hero-title em { color: var(--gold); font-style: italic; }
+  .hero-sub {
+    font-size: 1rem; line-height: 1.8; color: var(--text-muted);
+    max-width: 400px; font-weight: 300; margin-bottom: 2.5rem;
+  }
+  .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase;
+    font-weight: 500; font-family: 'Jost', sans-serif;
+    background: var(--brown-dark); color: var(--cream);
+    border: none; padding: 0.9rem 2rem; cursor: pointer;
+    border-radius: 2px; text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .btn-primary:hover { background: var(--brown-mid); transform: translateY(-1px); }
+  .btn-outline {
+    font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase;
+    font-weight: 500; font-family: 'Jost', sans-serif;
+    background: transparent; color: var(--brown-dark);
+    border: 0.5px solid var(--brown-dark); padding: 0.9rem 2rem;
+    cursor: pointer; border-radius: 2px; text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-outline:hover { background: var(--brown-dark); color: var(--cream); }
+  .hero-right {
+    background: var(--brown-dark);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .hero-pattern {
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(circle at 30% 70%, rgba(200,144,42,0.12) 0%, transparent 60%),
+      radial-gradient(circle at 80% 20%, rgba(160,98,42,0.1) 0%, transparent 50%);
+  }
+  .hero-img-placeholder {
+    position: relative; z-index: 1;
+    display: flex; flex-direction: column; align-items: center; gap: 1.5rem;
+    text-align: center; padding: 3rem;
+  }
+  .mate-icon {
+    width: 160px; height: 200px;
+  }
+  .hero-img-text {
+    font-family: 'Playfair Display', serif; font-style: italic;
+    color: rgba(245,240,232,0.4); font-size: 0.85rem; letter-spacing: 0.1em;
+  }
+  .hero-stats {
+    position: absolute; bottom: 2.5rem; left: 0; right: 0;
+    display: flex; justify-content: center; gap: 3rem; padding: 0 3rem;
+    z-index: 2;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Playfair Display', serif; font-size: 1.8rem;
+    color: var(--gold-light); display: block;
+  }
+  .stat-label {
+    font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: rgba(245,240,232,0.5); font-weight: 300;
+  }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    text-align: center; padding: 5rem 2rem 3rem;
+  }
+  .section-eyebrow {
+    font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); font-weight: 500; display: block; margin-bottom: 1rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3vw, 2.6rem);
+    color: var(--brown-dark); line-height: 1.2;
+  }
+  .section-title em { color: var(--gold); font-style: italic; }
+  .section-divider {
+    width: 60px; height: 1px; background: var(--gold);
+    margin: 1.2rem auto 0; opacity: 0.6;
+  }
+
+  /* ── CATEGORY TABS ── */
+  .cat-tabs {
+    display: flex; justify-content: center; gap: 0;
+    padding: 0 2rem 2.5rem; flex-wrap: wrap;
+    border-bottom: 0.5px solid var(--border);
+    max-width: 900px; margin: 0 auto;
+  }
+  .cat-tab {
+    font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase;
+    font-weight: 500; font-family: 'Jost', sans-serif;
+    background: none; border: none; cursor: pointer;
+    color: var(--text-muted); padding: 0.6rem 1.4rem;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s; margin-bottom: -0.5px;
+  }
+  .cat-tab.active, .cat-tab:hover {
+    color: var(--brown-dark); border-bottom-color: var(--gold);
+  }
+
+  /* ── PRODUCTS ── */
+  .catalog-section { padding: 0 2rem 5rem; max-width: 1200px; margin: 0 auto; }
+  .category-block { display: none; }
+  .category-block.active { display: block; }
+  .category-block h3 {
+    font-family: 'Playfair Display', serif; font-size: 1.4rem;
+    color: var(--brown-dark); margin: 2rem 0 1.5rem;
+    padding-bottom: 0.6rem; border-bottom: 0.5px solid var(--border);
+  }
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.2rem;
+  }
+  .product-card {
+    background: var(--warm-white);
+    border: 0.5px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+  }
+  .product-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(44,26,14,0.08);
+  }
+  .product-img {
+    width: 100%; aspect-ratio: 1;
+    background: var(--cream);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .product-img-placeholder {
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  }
+  .img-icon { font-size: 2.5rem; opacity: 0.25; }
+  .img-label {
+    font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--text-muted); opacity: 0.6;
+  }
+  .product-info { padding: 1rem 1.2rem 1.2rem; }
+  .product-name {
+    font-family: 'Playfair Display', serif; font-size: 1rem;
+    color: var(--brown-dark); margin-bottom: 0.3rem; line-height: 1.3;
+  }
+  .product-detail {
+    font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.8rem;
+    line-height: 1.5; font-weight: 300;
+  }
+  .product-price {
+    font-size: 1.05rem; font-weight: 500; color: var(--brown-mid);
+    letter-spacing: 0.02em;
+  }
+
+  /* ── BOMBILLAS ── */
+  .bombillas-list {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 0.8rem; margin-top: 1.5rem;
+  }
+  .bombilla-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.9rem 1.2rem;
+    background: var(--warm-white); border: 0.5px solid var(--border); border-radius: 4px;
+  }
+  .bombilla-name { font-size: 0.9rem; color: var(--text-body); }
+  .bombilla-price { font-size: 0.9rem; font-weight: 500; color: var(--brown-mid); }
+
+  /* ── BANNER ── */
+  .banner {
+    background: var(--brown-dark);
+    padding: 5rem 3rem;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .banner::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, rgba(200,144,42,0.15) 0%, transparent 70%);
+  }
+  .banner-content { position: relative; z-index: 1; }
+  .banner-title {
+    font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3vw, 2.8rem);
+    color: var(--cream); margin-bottom: 1rem; line-height: 1.2;
+  }
+  .banner-title em { color: var(--gold-light); font-style: italic; }
+  .banner-sub {
+    color: rgba(245,240,232,0.6); font-size: 0.95rem; font-weight: 300;
+    margin-bottom: 2rem; max-width: 480px; margin-left: auto; margin-right: auto;
+    line-height: 1.7;
+  }
+  .banner-ig {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase;
+    font-weight: 500; font-family: 'Jost', sans-serif;
+    color: var(--brown-dark); background: var(--gold-light);
+    border: none; padding: 0.9rem 2rem; border-radius: 2px;
+    text-decoration: none; cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .banner-ig:hover { background: var(--gold); transform: translateY(-1px); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #1A0E06;
+    padding: 3rem;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1.5rem;
+  }
+  .footer-logo {
+    font-family: 'Playfair Display', serif; font-size: 1.3rem;
+    color: var(--cream); letter-spacing: 0.03em;
+  }
+  .footer-logo span { color: var(--gold); font-style: italic; }
+  .footer-text { font-size: 0.75rem; color: rgba(245,240,232,0.35); font-weight: 300; }
+  .footer-ig {
+    font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--gold); text-decoration: none; font-weight: 500;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero-eyebrow { animation: fadeUp 0.6s ease both; }
+  .hero-title   { animation: fadeUp 0.6s 0.1s ease both; }
+  .hero-sub     { animation: fadeUp 0.6s 0.2s ease both; }
+  .hero-ctas    { animation: fadeUp 0.6s 0.3s ease both; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-left { padding: 3rem 1.5rem 2rem; }
+    .hero-right { min-height: 280px; }
+    .hero-stats { gap: 1.5rem; }
+    .catalog-section { padding: 0 1rem 3rem; }
+    footer { flex-direction: column; text-align: center; padding: 2rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Mate <span>House</span></div>
+  <ul class="nav-links">
+    <li><a href="#catalogo">Catálogo</a></li>
+    <li><a href="#nosotros">Nosotros</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <a href="https://instagram.com/_matehouse_" target="_blank" class="nav-ig">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+    @_matehouse_
+  </a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">Artesanía Argentina · Buenos Aires</p>
+    <h1 class="hero-title">
+      Mates con<br>alma <em>propia</em>
+    </h1>
+    <p class="hero-sub">
+      Imperiales, torpedos y camioneros elaborados con materiales seleccionados. Alpaca, bronce, cuero crudo y calabaza brasilera.
+    </p>
+    <div class="hero-ctas">
+      <a href="#catalogo" class="btn-primary">Ver catálogo</a>
+      <a href="https://instagram.com/_matehouse_" target="_blank" class="btn-outline">Instagram</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-pattern"></div>
+    <div class="hero-img-placeholder">
+      <svg class="mate-icon" viewBox="0 0 160 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- bombilla -->
+        <rect x="74" y="10" width="12" height="80" rx="6" fill="rgba(200,144,42,0.6)"/>
+        <!-- mate body -->
+        <ellipse cx="80" cy="155" rx="52" ry="42" fill="rgba(200,144,42,0.18)" stroke="rgba(200,144,42,0.5)" stroke-width="1.5"/>
+        <ellipse cx="80" cy="140" rx="48" ry="50" fill="rgba(160,98,42,0.15)" stroke="rgba(200,144,42,0.4)" stroke-width="1"/>
+        <!-- neck -->
+        <rect x="62" y="88" width="36" height="20" rx="4" fill="rgba(200,144,42,0.25)" stroke="rgba(200,144,42,0.5)" stroke-width="1"/>
+        <!-- decorative lines -->
+        <ellipse cx="80" cy="155" rx="36" ry="28" fill="none" stroke="rgba(200,144,42,0.2)" stroke-width="1" stroke-dasharray="4 3"/>
+      </svg>
+      <p class="hero-img-text">Sumá tus fotos desde el panel admin</p>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-num">30+</span>
+        <span class="stat-label">Modelos</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">100%</span>
+        <span class="stat-label">Artesanal</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">Env.</span>
+        <span class="stat-label">a todo el país</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATALOG -->
+<div class="section-header" id="catalogo">
+  <span class="section-eyebrow">Enero – Febrero 2026</span>
+  <h2 class="section-title">Nuestro <em>Catálogo</em></h2>
+  <div class="section-divider"></div>
+</div>
+
+<div style="padding: 0 2rem 0; max-width: 1200px; margin: 0 auto;">
+  <div class="cat-tabs">
+    <button class="cat-tab active" onclick="showCat('imperiales', this)">Imperiales</button>
+    <button class="cat-tab" onclick="showCat('torpedos', this)">Torpedos</button>
+    <button class="cat-tab" onclick="showCat('camioneros', this)">Camioneros</button>
+    <button class="cat-tab" onclick="showCat('otros', this)">Otros mates</button>
+    <button class="cat-tab" onclick="showCat('termos', this)">Termos</button>
+    <button class="cat-tab" onclick="showCat('materas', this)">Materas</button>
+    <button class="cat-tab" onclick="showCat('bombillas', this)">Bombillas</button>
+  </div>
+</div>
+
+<div class="catalog-section">
+
+  <!-- IMPERIALES -->
+  <div class="category-block active" id="cat-imperiales">
+    <div class="products-grid">
+      <div class="product-card"><div class="product-img"><div class="product-img-placeholder"><div class="img-icon">🧉</div><span class="img-label">Agregar foto</span></div></div><div class="product-info"><div class="product-name">Imperial Colores</div><div class="product-detail">Suela / Blanco / Rosa · Interior acero</div><div class="product-price">$35.000</div></div></div>
+      <div class="product-card"><div class="product-img"><div class="product-img-placeholder"><div class="img-icon">🧉</div><span class="img-label">Agregar foto</span></div></div><div class="product-info"><div class="product-name">Imperial Deluxe</div><div class="product-detail">Fleje de Alpaca · Virola de Acero</div><div class="product-price">$30.000</div></div></div>
+      <div class="product-card"><div class="product-img"><div class="product-img-placeholder"><div class="img-icon">🧉</div><span class="img-label">Agregar foto</span></div></div><div class="product-info"><div class="product-name">Imperial Clásico</div><div class="product-detail">Fleje de Bronce · Virola de Acero</div><div class="product-price">$30.000</div></div></div>
+      <div class="product-card"><div class="product-img"><div class="product-img-placeholder"><div class="img-icon">🧉</div><span class="img-label">Agregar foto</span></div></div><div class="product-info"><div class="product-name">Imperial Bronce</div><div class="product-detail">Base de Alpaca · Bolitas de Bronce</div><div class="product-price">$35.000</div></div></div>
+      <div class="product-card"><div class="product-img"><div class="product-img-placeholder"><div class="img-icon">🧉</div><span class="img-label">Agregar foto</span></div></div><div class="product-info"><div class="product-name">Imperial Premium</div><div class="product-detail">Base de Alpaca</div><div class="product-price">$50.000</div></div></div>
+      <div class="product-card"><div class="product-img"><div class="product-img-placeholder"><div class="img-icon">🧉</div><span class="img-label">Agregar foto</span></div></div><div class="product-info"><div class="product-name">Imperial Cuero Crudo</div><div class="product-detail">Calabaza brasilera · Fleje y virola de Alpaca</div><div class="product-price">$50.000</div></div></div>
+      <div class="product-card"><div class="product-img"><div class="product-img-placeholder"><div class="img-icon">🧉</div><span class="img-label">Agregar foto</span></div></div><div class="product-info"><div class="product-name">Imperial Animal Print</div><div class="product-detail">Base de Alpaca y Bolitas</div><div class="product-price">$50.000</div></div></div>
+      <div class="product-card"><div class="product-img"><div class="product-img-placeholder"><div class="img-icon">🧉</div><span class="img-label">Agregar foto</span></div></div><div class="product-info"><div class="product-name">Imperial Premium Cuero Crudo</div><div class="product-detail">Cuero crudo · Calabaza brasilera</div><div class="product-price">$60.000</div></div></div>
+    </div>
+  </div>
+
+  <!-- TORPEDOS -->
+  <div class="category-block" id="cat-torpedos">
+    <div class="products-grid">
+      <div class="product-card"><div class="product-img"><div class="product-img-placeholder"><div class="img-icon">🧉</div><span class="img-label">Agregar foto</span></div></div><div class="product-info"><div class="product-name">Torpedo Clásico</div><div class="product-detail">Virola de Acero</div><div class="product-price">$30.000</div></div></div>
+      <div class="product-card"><div class="product-img"><div class="product-img-placeholder"><div class="img-icon">🧉</div><span class="img-label">Agregar foto</span></div></div><div class="product-info"><div class="product-name">Torpedo Cincelado</div><div class="product-detail">Virola de Alpaca cincelada</div><div class="product-price">$38.000</div></div></div>
+      <div class="product-card"><div class="product-img"><div class="product-img-placeholder"><div class="img-icon">🧉</div><span class="img-label">Agregar foto</span></div></div><div class="product-info"><div class="product-name">Torpedo Premium</div><div class="product-detail">Fleje y virola de Alpaca</div><div class="product-price">$50.000</div></div></div>
+      <div class="product-card"><div class="product-img"><div class="product-img-placeholder"><div class="img-icon">🧉</div><span class="img-label">Agregar foto</span></div></div><div class="product-info"><div class="product-name">Torpedo Algarrobo</div><div class="product-detail">Cuero vacuno · Base alpaca · Bolitas de bronce</div><div class="product-price">$50.000</div></div></div>
+      <div class="product-card"><div class="product-img"><div class="product-img-placeholder"><div class="img-icon">🧉</div><span class="img-label">Agregar foto</span></div></div><div class="product-info"><div class="product-name">Torpedo Cuero Crudo</div><div class="product-detail">Virola cincelada de alpaca</div><div class="product-price">$50.000</div></div></div>
+      <div class="product-card"><div class="product-img"><div class="product-img-placeholder"><div class="img-icon">🧉</div><span class="img-label">Agregar foto</span></div></div><div class="product-info"><div class="product-name">Torpedo Premium Cuero Crudo</div><div class="product-detail">Cuero repujado · Calabaza brasilera · Virola de Alpaca</div><div class="product-price">$60.000</div></div></div>
+    </div>
+  </div>
+
+  <!-- CAMIONEROS -->
+  <div class="category-block" id="cat-camioneros">
+    <div class="products-grid">
+      <div class="product-card"><div class="product-img"><div class="product-img-placeholder"><div class="img-icon">🧉</div><span class="img-label">Agregar foto</span></div></div><div class="product-info"><div class="product-name">Camionero Clásico</div><div class="product-detail">Virola de Alpaca · Fleje de Acero</div><div class="product-price">$15.000</div></div></div>
+      <div class="product-card"><div class="product-img"><div class="product-img-placeholder"><div class="img-icon">🧉</div><span class="img-label">Agregar foto</span></div></div><div class="product-info"><div class="product-name">Camionero Imperial</div><div class="product-detail">Virola de Acero</div><div class="product-price">$30.000</div></div></div>
+      <div class="product-card"><div class="product-img"><div class="product-img-placeholder"><div class="img-icon">🧉</div><span class="img-label">Agregar foto</span></div></div><div class="product-info"><div class="product-name">Camionero Ranchero</div><div class="product-detail">Virola de Acero</div><div class="product-price">$35.000</div></div></div>
+      <div class="product-card"><div class="product-img"><div class="product-img-placeholder"><div class="img-icon">🧉</div><span class="img-label">Agregar foto</span></div></div><div class="product-info"><div class="product-name">Camionero Cuero Crudo</div><div class="product-detail">Virola de Acero</div><div class="product-price">$25.000</div></div></div>
+      <div class="product-card"><div class="product-img"><div class="product-img-placeholder"><div class="img-icon">🧉</div><span class="img-label">Agregar foto</span></div></div><div class="product-info"><div class="product-name">Camionero Repujado</div><div class="product-detail">Virola de Aluminio</div><div class="product-price">$23.000</div></div></div>
+    </div>
+  </div>
+
+  <!-- OTROS -->
+  <div class="category-block" id="cat-otros">
+    <div class="products-grid">
+      <div class="product-card"><div class="product-img"><div class="product-img-placeholder"><div class="img-icon">🧉</div><span class="img-label">Agregar foto</span></div></div><div class="product-info"><div class="product-name">Mate Imperial Pampa PVC Térmico</div><div class="product-detail">Negro · Marrón · Blanco · Verde · Rosa</div><div class="product-price">$15.000</div></div></div>
+      <div class="product-card"><div class="product-img"><div class="product-img-placeholder"><div class="img-icon">🧉</div><span class="img-label">Agregar foto</span></div></div><div class="product-info"><div class="product-name">Acero Simil Stanley</div><div class="product-detail"></div><div class="product-price">$15.000</div></div></div>
+    </div>
+  </div>
+
+  <!-- TERMOS -->
+  <div class="category-block" id="cat-termos">
+    <div class="products-grid">
+      <div class="product-card"><div class="product-img"><div class="product-img-placeholder"><div class="img-icon">♨️</div><span class="img-label">Agregar foto</span></div></div><div class="product-info"><div class="product-name">Termo Media Manija Negro</div><div class="product-detail"></div><div class="product-price">$30.000</div></div></div>
+      <div class="product-card"><div class="product-img"><div class="product-img-placeholder"><div class="img-icon">♨️</div><span class="img-label">Agregar foto</span></div></div><div class="product-info"><div class="product-name">Termo Media Manija</div><div class="product-detail"></div><div class="product-price">$30.000</div></div></div>
+      <div class="product-card"><div class="product-img"><div class="product-img-placeholder"><div class="img-icon">♨️</div><span class="img-label">Agregar foto</span></div></div><div class="product-info"><div class="product-name">Termo Simil Stanley</div><div class="product-detail"></div><div class="product-price">$40.000</div></div></div>
+      <div class="product-card"><div class="product-img"><div class="product-img-placeholder"><div class="img-icon">♨️</div><span class="img-label">Agregar foto</span></div></div><div class="product-info"><div class="product-name">Termo Mate System</div><div class="product-detail"></div><div class="product-price">$50.000</div></div></div>
+    </div>
+  </div>
+
+  <!-- MATERAS -->
+  <div class="category-block" id="cat-materas">
+    <div class="products-grid">
+      <div class="product-card"><div class="product-img"><div class="product-img-placeholder"><div class="img-icon">👜</div><span class="img-label">Agregar foto</span></div></div><div class="product-info"><div class="product-name">Matera Eco Cuero</div><div class="product-detail"></div><div class="product-price">$12.500</div></div></div>
+      <div class="product-card"><div class="product-img"><div class="product-img-placeholder"><div class="img-icon">👜</div><span class="img-label">Agregar foto</span></div></div><div class="product-info"><div class="product-name">Matera 100% Cuero</div><div class="product-detail"></div><div class="product-price">$20.000</div></div></div>
+      <div class="product-card"><div class="product-img"><div class="product-img-placeholder"><div class="img-icon">👜</div><span class="img-label">Agregar foto</span></div></div><div class="product-info"><div class="product-name">Porta Mate Eco Cuero</div><div class="product-detail"></div><div class="product-price">$7.500</div></div></div>
+      <div class="product-card"><div class="product-img"><div class="product-img-placeholder"><div class="img-icon">👜</div><span class="img-label">Agregar foto</span></div></div><div class="product-info"><div class="product-name">Porta Mate 100% Cuero</div><div class="product-detail"></div><div class="product-price">$45.000</div></div></div>
+      <div class="product-card"><div class="product-img"><div class="product-img-placeholder"><div class="img-icon">👜</div><span class="img-label">Agregar foto</span></div></div><div class="product-info"><div class="product-name">Matera Eco Cuero Grande</div><div class="product-detail"></div><div class="product-price">$16.500</div></div></div>
+    </div>
+  </div>
+
+  <!-- BOMBILLAS -->
+  <div class="category-block" id="cat-bombillas">
+    <div class="bombillas-list">
+      <div class="bombilla-item"><span class="bombilla-name">Chata acero</span><span class="bombilla-price">$4.000</span></div>
+      <div class="bombilla-item"><span class="bombilla-name">Pico loro</span><span class="bombilla-price">$7.500</span></div>
+      <div class="bombilla-item"><span class="bombilla-name">Pico loro alpaca</span><span class="bombilla-price">$12.000</span></div>
+      <div class="bombilla-item"><span class="bombilla-name">Bombillón premium</span><span class="bombilla-price">$25.000</span></div>
+      <div class="bombilla-item"><span class="bombilla-name">Premium pico recto</span><span class="bombilla-price">$30.000</span></div>
+      <div class="bombilla-item"><span class="bombilla-name">Alpaca pico recto</span><span class="bombilla-price">$25.000</span></div>
+      <div class="bombilla-item"><span class="bombilla-name">Alpaca recto labrado pico bronce</span><span class="bombilla-price">$25.000</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- BANNER -->
+<section class="banner" id="contacto">
+  <div class="banner-content">
+    <h2 class="banner-title">Seguinos en <em>Instagram</em></h2>
+    <p class="banner-sub">Novedades, promociones y los últimos modelos disponibles. Te respondemos por DM.</p>
+    <a href="https://instagram.com/_matehouse_" target="_blank" class="banner-ig">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+      @_matehouse_
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Mate <span>House</span></div>
+  <span class="footer-text">© 2026 Mate House · Buenos Aires, Argentina</span>
+  <a href="https://instagram.com/_matehouse_" target="_blank" class="footer-ig">@_matehouse_</a>
+</footer>
+
+<script>
+function showCat(id, btn) {
+  document.querySelectorAll('.category-block').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.cat-tab').forEach(el => el.classList.remove('active'));
+  document.getElementById('cat-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
